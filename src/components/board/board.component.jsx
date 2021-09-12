@@ -20,6 +20,15 @@ class Board extends React.Component {
      
     }
 
+    handleReset = (evt) => {
+        evt.stopPropagation();
+        this.setState({
+            player: 'X',
+            board: ['','','','','','','','',''],
+            win: false,
+            playerWin:''
+        });
+    }
     handleClick = (evt) =>{
         const playCellPostion = evt.currentTarget.getAttribute('data');
         var auxBoard = Object.assign([], this.state.board);
@@ -90,15 +99,14 @@ class Board extends React.Component {
             }
 
             //diagonal
-            if( teste[0][0] !== '' && teste[1][1] !== '' && teste[2][2] !== '' && teste[0][2] !== '' && teste[1][1] !== '' && teste[2][0] !== ''){
-                if(teste[0][0] === teste[1][1]  && teste[1][1]=== teste[2][2] ){
-                    win = true;
-                    player = teste[0][0];
-                }
-                if(teste[0][2]===teste[1][1] && teste[1][1]===teste[2][0]){
-                    win = true;
-                    player = teste[0][2];
-                }
+            if( teste[0][0] !== '' && teste[1][1] !== '' && teste[2][2] !== '' && teste[0][0] === teste[1][1]  && teste[1][1]=== teste[2][2]){
+                win = true;
+                player = teste[0][0];
+            }
+
+            if(teste[0][2] !== '' && teste[1][1] !== '' && teste[2][0] !== '' && teste[0][2]===teste[1][1] && teste[1][1]===teste[2][0]){
+                win = true;
+                player = teste[0][2];
             }
 
             if(win){
@@ -108,50 +116,54 @@ class Board extends React.Component {
     }
 
     render() {
-     
+        const winSettings = [<span>Player {this.state.playerWin} WON!!!!</span>,<br></br>,<button onClick={this.handleReset.bind(this)}>Reset Game!!</button> ];
+
         return (
-            <div className="board-container">
-                <span>Player {this.state.player} is playing</span>
+            <div className="page-container">
+                <div className="board-container">
+                    <span>Player {this.state.player} is playing</span>
 
-                <div className="board-rows">
-                    <div onClick={this.handleClick} className="board-cells first-cell" data="0" >
-                        <span>{this.state.board[0]}</span>
+                    <div className="board-rows">
+                        <div onClick={this.handleClick} className="board-cells first-cell" data="0" >
+                            <span>{this.state.board[0]}</span>
+                        </div>
+                        <div onClick={this.handleClick} className="board-cells" data="1">
+                        <span>{this.state.board[1]}</span>
+                        </div>
+                        <div onClick={this.handleClick} className="board-cells" data="2">
+                            <span>{this.state.board[2]}</span>
+                        </div>
                     </div>
-                    <div onClick={this.handleClick} className="board-cells" data="1">
-                    <span>{this.state.board[1]}</span>
+
+                    <div className="board-rows"> 
+                        <div onClick={this.handleClick} className="board-cells first-cell" data="3">
+                            <span>{this.state.board[3]}</span>
+                        </div>
+                        <div onClick={this.handleClick} className="board-cells" data="4">
+                            <span>{this.state.board[4]}</span>
+                        </div>
+                        <div onClick={this.handleClick} className="board-cells" data="5">
+                            <span>{this.state.board[5]}</span>
+                        </div>
                     </div>
-                    <div onClick={this.handleClick} className="board-cells" data="2">
-                        <span>{this.state.board[2]}</span>
+
+                    <div className="board-rows"> 
+                        <div onClick={this.handleClick} className="board-cells first-cell last-row" data="6">
+                            <span>{this.state.board[6]}</span>
+                        </div>
+                        <div onClick={this.handleClick} className="board-cells last-row" data="7">
+                            <span>{this.state.board[7]}</span>
+                        </div>
+                        <div onClick={this.handleClick} className="board-cells last-row" data="8">
+                            <span>{this.state.board[8]}</span>
+                        </div>
                     </div>
                 </div>
-
-                <div className="board-rows"> 
-                    <div onClick={this.handleClick} className="board-cells first-cell" data="3">
-                        <span>{this.state.board[3]}</span>
-                    </div>
-                    <div onClick={this.handleClick} className="board-cells" data="4">
-                        <span>{this.state.board[4]}</span>
-                    </div>
-                    <div onClick={this.handleClick} className="board-cells" data="5">
-                        <span>{this.state.board[5]}</span>
-                    </div>
+                <div className="bottom-container">
+                    {
+                        this.state.win ? winSettings.map( (item) => (item) ) : ''
+                    }    
                 </div>
-
-                <div className="board-rows"> 
-                    <div onClick={this.handleClick} className="board-cells first-cell last-row" data="6">
-                        <span>{this.state.board[6]}</span>
-                    </div>
-                    <div onClick={this.handleClick} className="board-cells last-row" data="7">
-                        <span>{this.state.board[7]}</span>
-                    </div>
-                    <div onClick={this.handleClick} className="board-cells last-row" data="8">
-                        <span>{this.state.board[8]}</span>
-                    </div>
-                </div>
-
-                {
-                    this.state.win ? <span>Player {this.state.playerWin} WON!!!!</span> : ''
-                }
             </div>
         );
     }
